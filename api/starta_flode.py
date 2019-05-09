@@ -16,7 +16,7 @@ class StartaFlode(Resource):
         # Find pnr in db
         mongo_client = MongoClient(MONGODB_CONNECTION)
         # if not found
-        db = mongo_client['abtest-demo']
+        db = mongo_client['heroku_ssj5qmzb']
         subjects = db.subjects
         subject = subjects.find_one({'pnr': pnr})
         if subject is not None:
