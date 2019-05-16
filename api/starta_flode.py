@@ -18,18 +18,14 @@ class StartaFlode(Resource):
         # if not found
         db = mongo_client['heroku_ssj5qmzb']
         subjects = db.subjects
-        subject = subjects.find_one({'pnr': pnr})
-        if subject is not None:
-            flode = subject['flode']
-        else:
-            flode = 'A' if ord(pnr[-1]) % 2 == 0 else 'B'
-            subject = {'id': pnr, 'flode': flode}
+
+        flode = 'A' if ord(pnr[-1]) % 2 == 0 else 'B'
+
         # else
         # flode = db.flode
         # Save starting time or create a new record in db
         start_ts = datetime.now().timestamp()
-        subject['start_at'] = start_ts
-        subject['ref'] = secrets.token_hex(64)
+        subject = {'pnr': pnr, 'flode': flode, 'start_at': start_ts, 'ref': secrets.token_hex(16), 'end_at': None}
         subjects.insert_one(subject)
+        print(subject)
         return {'ref': subject['ref'], 'flode': flode}, 200
-
